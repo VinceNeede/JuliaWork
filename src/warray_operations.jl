@@ -1,6 +1,6 @@
 
 # view behaviour
-struct WSubArray{P} <: WAbstractArray
+struct WSubArray{P,N} <: WAbstractArray{N}
     parent :: P
     range :: Tuple{Vararg{UnitRange{Int}}}
     data :: AbstractArray
@@ -11,7 +11,7 @@ function Base.view(arr::WAbstractArray, range::UnitRange{Int}...)
 end
 
 
-struct WReshaped{P} <: WAbstractArray
+struct WReshaped{P,N} <: WAbstractArray{N}
     parent :: P
     dims :: Tuple{Vararg{Int}}
     data :: AbstractArray

@@ -1,6 +1,6 @@
 
 
-abstract type WAbstractArray end
+abstract type WAbstractArray{N} end
 mutable struct Allocated
     data :: Bool
 end
@@ -18,7 +18,7 @@ function Base.similar(arr::WAbstractArray)
     return WArray(size(arr))
 end
 
-struct WArray{N} <: WAbstractArray
+struct WArray{N} <: WAbstractArray{N}
     data :: AbstractArray{Float64,N}
     lbound :: bound
     rbound :: bound
@@ -58,3 +58,9 @@ function fill(size::Tuple{Vararg{Int}}, value)
     fill!(res, value)
     return res
 end
+
+function Base.convert(::Type{AbstractArray{Float64,N}}, wa::WAbstractArray{N}) where N
+    return wa.data
+end
+
+to_AbstractArray(wa::WAbstractArray) = convert(AbstractArray{Float64, length(size(wa))}, wa)
