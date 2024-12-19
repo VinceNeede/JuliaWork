@@ -64,3 +64,13 @@ function Base.convert(::Type{AbstractArray{Float64,N}}, wa::WAbstractArray{N}) w
 end
 
 to_AbstractArray(wa::WAbstractArray) = convert(AbstractArray{Float64, length(size(wa))}, wa)
+
+function Wfun(func::Function, args...)
+    return func([arg isa WAbstractArray ? to_AbstractArray(arg) : arg for arg in args]...)
+end
+
+macro Wfun(func, args...)
+    esc(quote
+        Wfun($func, $(map(x -> :($x), args)...))
+    end)
+end
